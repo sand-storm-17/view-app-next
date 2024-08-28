@@ -18,5 +18,6 @@ export async function GET() {
   // } finally {
   //   await prisma.$disconnect();
   // }
+  return NextResponse.json;
 }
 
