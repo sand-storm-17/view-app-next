@@ -6,7 +6,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 
 // import { PublicKey } from "@solana/web3.js";
 
-const base58 = require('bs58');
+// const base58 = require('bs58');
 
 // import { WalletButton } from "./solana-provider";
 // import * as React from 'react';
@@ -22,13 +22,13 @@ const base58 = require('bs58');
 // import cluster from "cluster";
 // import { ConnectionProvider } from "@solana/wallet-adapter-react";
 
-require('dotenv').config();
+// require('dotenv').config();
 
-const web3 = require('@solana/web3.js');
+// const web3 = require('@solana/web3.js');
 
-const wallet = useWallet();
-wallet.publicKey;
-console.log(wallet);
+// const wallet = useWallet();
+// wallet.publicKey;
+// console.log(wallet);
 // const secret = JSON.parse(process.env.SECRET_KEY);
 
 // const from = web3.Keypair.fromSecretKey(new Uint8Array(secret));

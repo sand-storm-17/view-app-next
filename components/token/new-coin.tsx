@@ -36,7 +36,7 @@ import {
   TokenInvalidAccountOwnerError,
   unpackAccount,
 } from '@solana/spl-token';
-import { Coin, Prisma, PrismaClient } from '@prisma/client';
+// import { Coin, Prisma, PrismaClient } from '@prisma/client';
 import { PublicKey } from '@solana/web3.js';
 import { token } from '@coral-xyz/anchor/dist/cjs/utils';
 import { serialize } from 'borsh';
