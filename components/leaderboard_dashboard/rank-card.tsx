@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { MdKeyboardDoubleArrowUp } from 'react-icons/md';
 import BuySell from '../buySellCard/BuySell';
-import { YouTuber } from '@prisma/client';
+// import { YouTuber } from '@prisma/client';
 
 interface youtuber {
   name: string;
