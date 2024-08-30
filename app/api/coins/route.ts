@@ -41,25 +41,3 @@ export async function GET() {
   }
 }
 
-export async function POST(req: NextRequest) {
-  try {
-    const json = await req.json();
-    const data = JSON.parse(json);
-    console.log(data);
-    await prisma.coin.create({
-      data: {
-        name: data.coinName,
-        mintAmount: data.amount,
-        mint: data.mint,
-        mintAuth: data.mintAuth,
-        freezeAuth: data.freezeAuth,
-        tokenAccount: data.tokenAccount,
-        createdBy: data.createdBy,
-        subscriberCount: data.subscriberCount,
-      },
-    });
-  } catch (error) {
-    console.log("Error sending post request", error);
-    return NextResponse.error();
-  }
-}

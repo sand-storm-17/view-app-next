@@ -40,6 +40,8 @@ import {
 import { PublicKey } from "@solana/web3.js";
 import { token } from "@coral-xyz/anchor/dist/cjs/utils";
 import { serialize } from "borsh";
+import { Coin } from "@prisma/client";
+import { saveCoin } from "@/app/actions";
 
 interface Coindata {
   coinName: string;
@@ -338,14 +340,7 @@ const CreateNewCoin = async (
     createdBy: payer.toString(),
     subscriberCount: subCount,
   };
-
-  fetch("/api/coins", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+  await saveCoin(data);
 };
 
 export default function NewCoin() {
@@ -389,9 +384,9 @@ export default function NewCoin() {
       >
         Want to create you own Coin?
       </button>
-      <button className="bg-black" onClick={send1Sol}>
+      {/* <button className="bg-black" onClick={send1Sol}>
         Send 1 Sol
-      </button>
+      </button> */}
       {showModal ? (
         <div className="absolute flex items-start bg-transparent h-1/2 w-1/4 rounded-2xl">
           <form

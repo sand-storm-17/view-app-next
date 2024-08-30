@@ -44,97 +44,73 @@ export default function Dashboard() {
   }, [query.data, showAll]);
 
   return (
-    <div className="flex space-y-2">
-      <div className="justify-between">
-        <div className="flex justify-between">
-          <div className="space-x-2">
-            {query.isLoading ? (
-              <span className="loading loading-spinner"></span>
-            ) : (
-              <button
-                className="btn btn-sm btn-outline"
-                onClick={async () => {
-                  await query.refetch();
-                  await client.invalidateQueries({
-                    queryKey: ["getTokenAccountBalance"],
-                  });
-                }}
-              >
-                <IconRefresh size={16} />
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
+    <div className="flex-col basis-full">
       {query.isError && (
         <pre className="alert alert-error">
           Error: {query.error?.message.toString()}
         </pre>
       )}
       {query.isSuccess && (
-        <div>
+        <div className="flex-1">
           {query.data.length === 0 ? (
             <div>No token accounts found.</div>
           ) : (
-            <table className="table border-4 rounded-lg border-separate border-base-300">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Account Public Key</th>
-                  <th>Mint Public Key</th>
-                  <th className="text-right">Balance</th>
-                </tr>
-              </thead>
-              <tbody>
+            <div className="flex basis-full items-center justify-center table border-4 rounded-lg border-separate border-base-300 overflow-scroll">
+              <div>
+                <div className="flex basis-full justify-around font-body">
+                  <div>Name</div>
+                  <div>Account Public Key</div>
+                  <div>Mint Public Key</div>
+                  <div className="text-right">Balance</div>
+                </div>
+              </div>
+              <div className="flex-col basis-full">
                 {items?.map(({ account, pubkey }) => (
-                  <tr key={pubkey.toString()}>
-                    <td className="flex space-x-2">
-                      <span className="font-mono">
-                        TokenName
-                      </span>
-                    </td>
-                    <td>
+                  <div key={pubkey.toString()} className="flex justify-around">
+                    <div className="flex space-x-2">
+                      <span className="font-body">TokenName</span>
+                    </div>
+                    <div>
                       <div className="flex space-x-2">
-                        <span className="font-mono">
+                        <span className="font-body">
                           <ExplorerLink
                             label={ellipsify(pubkey.toString())}
                             path={`account/${pubkey.toString()}`}
                           />
                         </span>
                       </div>
-                    </td>
-                    <td>
+                    </div>
+                    <div>
                       <div className="flex space-x-2">
-                        <span className="font-mono">
+                        <span className="font-body">
                           <ExplorerLink
                             label={ellipsify(account.data.parsed.info.mint)}
                             path={`account/${account.data.parsed.info.mint.toString()}`}
                           />
                         </span>
                       </div>
-                    </td>
-                    <td className="text-right">
-                      <span className="font-mono">
+                    </div>
+                    <div className="text-right">
+                      <span className="font-body">
                         {account.data.parsed.info.tokenAmount.uiAmount}
                       </span>
-                    </td>
-                  </tr>
+                    </div>
+                  </div>
                 ))}
-
                 {(query.data?.length ?? 0) > 5 && (
-                  <tr>
-                    <td colSpan={4} className="text-center">
+                  <div>
+                    <div className="text-center">
                       <button
                         className="btn btn-xs btn-outline"
                         onClick={() => setShowAll(!showAll)}
                       >
                         {showAll ? "Show Less" : "Show All"}
                       </button>
-                    </td>
-                  </tr>
+                    </div>
+                  </div>
                 )}
-              </tbody>
-            </table>
+              </div>
+            </div>
           )}
         </div>
       )}

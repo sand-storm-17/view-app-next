@@ -20,10 +20,10 @@ export default function Window() {
   // console.log(wallet.publicKey);
 
   return (
-    <div className="flex basis-full bg-background-800 justify-center items-center">
-      <div className="flex flex-col w-2/5 h-2/3 bg-background-100 border-none justify-center rounded-xl ">
-        <div className="flex m-5 justify-center">
-          <div className="flex items-center">
+    <div className="flex shrink basis-full bg-background-800 justify-center items-center">
+      <div className="flex shrink flex-col w-2/5 h-2/3 bg-background-100 border-none justify-center rounded-xl ">
+        <div className="flex shrink m-5 justify-center">
+          <div className="flex shrink items-center">
             <button
               onClick={()=>{
                 setCurrentWindow('Leaderboard')

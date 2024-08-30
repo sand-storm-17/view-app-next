@@ -1,16 +1,33 @@
-'use client';
-import { useState } from 'react';
+"use client";
+import { Coin } from "@prisma/client";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
-export default function BuySell() {
+async function getCoins() {
+  // Fetch data from external API
+  const res = await fetch("http://localhost:3000/api/coins");
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch coins");
+  }
+  const response = await res.json();
+  return response?.coins;
+}
+
+export default function Buy() {
+  const { data, isLoading, isError } = useQuery<Coin[]>({
+    queryFn: async () => await getCoins(),
+    queryKey: ["id"],
+  });
   const [isActiveSell, setIsActiveSell] = useState(false);
   const [numberOfTokens, setNumberOfTokens] = useState(0);
-  const [selectedToken, setSelectedToken] = useState('Option 1');
+  const [selectedToken, setSelectedToken] = useState("");
 
   const tokenPrices: { [key: string]: number } = {
-    'Option 1': 100,
-    'Option 2': 200,
-    'Option 3': 300,
-    'Option 4': 400,
+    "Option 1": 100,
+    "Option 2": 200,
+    "Option 3": 300,
+    "Option 4": 400,
   };
 
   const pricePerToken = tokenPrices[selectedToken];
@@ -32,29 +49,30 @@ export default function BuySell() {
 
   const handleTokenChange = (event: { target: { value: string } }) => {
     setSelectedToken(event.target.value);
+    setIsActiveSell
   };
 
   return (
-    <div className="flex basis-0 justify-center items-center">
-      <div className="bg-background-400 rounded-md p-4 shadow-md">
+    <div className="flex basis-full justify-center items-center">
+      <div className="bg-background-400 min-h-full rounded-md p-4 shadow-md">
         <div className="flex justify-between">
           <button
             className={` text-white font-bold py-2 px-4 rounded font-heading
-              ${!isActiveSell && 'active'} ${
-              !isActiveSell ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-400'
+              ${!isActiveSell && "active"} ${
+              !isActiveSell ? "bg-green-500 hover:bg-green-600" : "bg-gray-400"
             }`}
             onClick={handleBuyButtonClick}
           >
             BUY
           </button>
-          <button
+          {/* <button
             className={`text-white font-bold py-2 px-4 rounded font-heading ${
-              isActiveSell && 'active'
-            } ${isActiveSell ? 'bg-red-500 hover:bg-red-600 ' : 'bg-gray-500'}`}
+              isActiveSell && "active"
+            } ${isActiveSell ? "bg-red-500 hover:bg-red-600 " : "bg-gray-500"}`}
             onClick={handleSellButtonClick}
           >
             SELL
-          </button>
+          </button> */}
         </div>
 
         <div className="grid grid-cols-2 gap-4 mt-4">
@@ -65,10 +83,9 @@ export default function BuySell() {
               value={selectedToken}
               onChange={handleTokenChange}
             >
-              <option>Option 1</option>
-              <option>Option 2</option>
-              <option>Option 3</option>
-              <option>Option 4</option>
+              {data?.map((value, index) => {
+                return <option key={index} >{value.name}</option>;
+              })}
             </select>
           </label>
           <div className="flex items-center font-body">
@@ -90,10 +107,10 @@ export default function BuySell() {
         </div>
         <button
           className={`bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-4 w-full font-heading ${
-            isActiveSell ? 'bg-red-500' : ''
+            isActiveSell ? "bg-red-500" : ""
           }`}
         >
-          {isActiveSell ? 'SELL' : 'BUY'}
+          {isActiveSell ? "SELL" : "BUY"}
         </button>
       </div>
     </div>

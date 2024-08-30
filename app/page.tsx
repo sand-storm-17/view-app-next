@@ -1,5 +1,4 @@
 
-import DashboardFeature from '@/components/dashboard/dashboard-feature';
 import Window from '@/components/leaderboard_dashboard/window';
 import NewCoin from '@/components/token/new-coin';
 
