@@ -1,6 +1,10 @@
-import { Key, useEffect, useState } from 'react';
-import RankCard from './rank-card';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+"use client";
+
+import { Key, useEffect, useMemo, useState } from "react";
+import RankCard from "./rank-card";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { Coin } from "@prisma/client";
+import { useQuery } from "@tanstack/react-query";
 
 type youtuber = {
   id: number;
@@ -9,27 +13,30 @@ type youtuber = {
   subscriberCount: number;
 };
 
-export default async function Leaderboard() {
-  // const [repo, setRepo] = useState<youtuber[]>([]);
-  // useEffect(() => {
-  //   getYoutubers();
-  // }, []);
-  // async function getYoutubers() {
-  //   // Fetch data from external API
-  //   const res = await fetch('http://localhost:3000/api/youtubers');
+async function getCoins() {
+  // Fetch data from external API
+  const res = await fetch("http://localhost:3000/api/coins");
 
-  //   if (!res.ok) {
-  //     throw new Error('Failed to fetch youtubers');
-  //   }
-  //   const response = await res.json();
-  //   setRepo(response);
-  // }
-  // console.log(repo);
+  if (!res.ok) {
+    throw new Error("Failed to fetch coins");
+  }
+  const response = await res.json();
+  return response?.coins;
+}
+
+export default function Leaderboard() {
+
+  const {data, isLoading, isError} = useQuery<Coin[]>({
+    queryFn: async () => await getCoins(),
+    queryKey: ["id"]
+  })
+  if(isLoading) return <div>Loading</div>
+  if(isError) return <div>Sorry, there was an Error</div>
   return (
     <div className="flex basis-full flex-col gap-2 overflow-hidden">
-      {/* {repo.map(=>{
-        <RankCard value={val}/>
-      })} */}
+      {data?.map((value) => {
+        return <RankCard key={value.id} value={value} />;
+      })}
     </div>
   );
 }

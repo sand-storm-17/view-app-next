@@ -12,3 +12,15 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Coin {
+  id Int @id @default(autoincrement())
+  name String 
+  mintAmount Int
+  mint String[]
+  mintAuth String[]
+  freezeAuth String[]
+  tokenAccount String[]
+  createdBy String
+  subscriberCount Int
+}

@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { WalletContextState } from '@solana/wallet-adapter-react';
+import { useState, useEffect } from "react";
+import { WalletContextState } from "@solana/wallet-adapter-react";
 import {
   Connection,
   Keypair,
@@ -11,9 +11,9 @@ import {
   SystemProgram,
   Transaction,
   TransactionInstruction,
-} from '@solana/web3.js';
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import { sendTransaction } from './sendTransaction';
+} from "@solana/web3.js";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { sendTransaction } from "./sendTransaction";
 import {
   Account,
   AccountType,
@@ -35,40 +35,27 @@ import {
   TokenAccountNotFoundError,
   TokenInvalidAccountOwnerError,
   unpackAccount,
-} from '@solana/spl-token';
+} from "@solana/spl-token";
 // import { Coin, Prisma, PrismaClient } from '@prisma/client';
-import { PublicKey } from '@solana/web3.js';
-import { token } from '@coral-xyz/anchor/dist/cjs/utils';
-import { serialize } from 'borsh';
+import { PublicKey } from "@solana/web3.js";
+import { token } from "@coral-xyz/anchor/dist/cjs/utils";
+import { serialize } from "borsh";
 
-// class CreateMetadataArgs {
-//   constructor(properties) {
-//     Object.keys(properties).forEach((key) => {
-//       this[key] = properties[key];
-//     });
-//   }
-// }
-
-// const METADATA_SCHEMA = new Map([
-//   [
-//     CreateMetadataArgs,
-//     {
-//       kind: 'struct',
-//       fields: [
-//         ['name', 'string'],
-//         ['symbol', 'string'],
-//         ['uri', 'string'],
-//         ['sellerFeeBasisPoints', 'u16'],
-//         ['creators', { kind: 'option', type: ['pubkey'] }],
-//       ],
-//     },
-//   ],
-// ]);
+interface Coindata {
+  coinName: string;
+  amount: number;
+  mint: string[];
+  mintAuth: string[];
+  freezeAuth: string[];
+  tokenAccount: string[];
+  createdBy: string;
+  subscriberCount: number;
+}
 
 const CreateNewCoin = async (
   name: string,
-  value: string,
-  email: FormDataEntryValue | null,
+  amount: number,
+  subCount: number,
   connection: Connection,
   wallet: WalletContextState
 ) => {
@@ -81,7 +68,7 @@ const CreateNewCoin = async (
   const lamports = await getMinimumBalanceForRentExemptMint(connection);
 
   if (payer == null) {
-    console.log('no payer');
+    console.log("no payer");
     return;
   }
 
@@ -104,21 +91,26 @@ const CreateNewCoin = async (
     )
   );
   const signers: Signer[] = [mintAccount];
+  let signature1;
+  let latestBlockHash;
+    signature1 = await wallet.sendTransaction(transaction, connection, {
+      signers: signers,
+    });
+  
+    latestBlockHash = await connection.getLatestBlockhash();
+    
+    console.log(mintAccount.publicKey.toBase58());
 
-  const signature1 = await wallet.sendTransaction(transaction, connection, {
-    signers: signers,
-  });
+  if(latestBlockHash === undefined) throw Error;
 
-  const latestBlockHash = await connection.getLatestBlockhash();
-
-  console.log(mintAccount.publicKey.toBase58());
+  
 
   const mintInfo = await getMint(connection, mintAccount.publicKey);
   console.log(mintInfo.supply);
 
   //End
 
-  console.log('second step');
+  console.log("second step");
 
   //Create an Associated Token Account
   //Start
@@ -139,7 +131,7 @@ const CreateNewCoin = async (
       lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
       signature: signature1,
     },
-    'finalized'
+    "finalized"
   );
 
   console.log(confirmation);
@@ -149,7 +141,7 @@ const CreateNewCoin = async (
     account = await getAccount(
       connection,
       associatedToken,
-      'confirmed',
+      "confirmed",
       programId
     );
   } catch (error: unknown) {
@@ -185,7 +177,7 @@ const CreateNewCoin = async (
             lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
             signature: signature,
           },
-          'finalized'
+          "finalized"
         );
       } catch (error: unknown) {
         // Ignore all errors; for now there is no API-compatible way to selectively ignore the expected
@@ -196,7 +188,7 @@ const CreateNewCoin = async (
       account = await getAccount(
         connection,
         associatedToken,
-        'confirmed',
+        "confirmed",
         programId
       );
     } else {
@@ -204,7 +196,7 @@ const CreateNewCoin = async (
     }
   }
 
-  const info = await connection.getAccountInfo(account.address, 'finalized');
+  const info = await connection.getAccountInfo(account.address, "finalized");
   console.log(info);
   const tokenAccount = unpackAccount(associatedToken, info, programId);
   const tokenAccountInfo = await getAccount(connection, tokenAccount.address);
@@ -220,7 +212,7 @@ const CreateNewCoin = async (
       mintAccount.publicKey,
       tokenAccount.address,
       mintAuthority.publicKey,
-      100000,
+      amount,
       multiSigners,
       programId
     )
@@ -238,7 +230,7 @@ const CreateNewCoin = async (
       lastValidBlockHeight: latestBlockHash2.lastValidBlockHeight,
       signature: signature2,
     },
-    'confirmed'
+    "confirmed"
   );
 
   //End
@@ -297,8 +289,6 @@ const CreateNewCoin = async (
   //   image: 'Img URL',
   // };
 
-  
-
   // const metadataArgs = new CreateMetadataArgs({
   //   name: name,
   //   symbol: 'symbol',
@@ -332,20 +322,30 @@ const CreateNewCoin = async (
 
   // await mintToChecked
 
-  // const prisma = new PrismaClient();
+  const data: Coindata = {
+    coinName: name,
+    amount: amount,
+    mint: [mintAccount.publicKey.toString(), mintAccount.secretKey.toString()],
+    mintAuth: [
+      mintAuthority.publicKey.toString(),
+      mintAuthority.secretKey.toString(),
+    ],
+    freezeAuth: [
+      freezeAuthority.publicKey.toString(),
+      freezeAuthority.publicKey.toString(),
+    ],
+    tokenAccount: [tokenAccount.address.toString()],
+    createdBy: payer.toString(),
+    subscriberCount: subCount,
+  };
 
-  // const createCoin = await prisma.coin.create({
-  //   data: {
-  //     coinName: name,
-  //     numberOfCoinsMinted: 10,
-  //     mintAddress: mintAuthority.publicKey.toString(),
-  //     freezeAuthority: freezeAuthority.publicKey.toString(),
-  //     associatedTokenAccount: tokenAccount.toString(),
-  //   },
-  // });
-
-  // console.log(createCoin);
-  // return createCoin;
+  fetch("/api/coins", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
 };
 
 export default function NewCoin() {
@@ -358,15 +358,22 @@ export default function NewCoin() {
   const wallet = useWallet();
   // console.log(wallet);
   async function onSubmitHandler(e: FormData) {
-    const name = e.get('name')?.toString();
-    const value = e.get('amount')?.toString();
-    const email = e.get('email')?.toString();
-    if (name === undefined || value === undefined || email === undefined) {
-      console.log('Values not present in form', name, value, email);
+    const name = e.get("name")?.toString();
+    const value = Number(e.get("amount")?.toString());
+    const email = e.get("email")?.toString();
+    const subcount = Number(e.get("subcount")?.toString());
+    console.log(name, value, email, subcount);
+    if (
+      name === undefined ||
+      value === undefined ||
+      email === undefined ||
+      subcount === undefined
+    ) {
+      console.log("Values not present in form", name, value, email, subcount);
       return;
     }
-    const baseValue = e.get('value');
-    const mint = await CreateNewCoin(name, value, email, connection, wallet);
+    // const baseValue = e.get('value');
+    const mint = await CreateNewCoin(name, value, subcount, connection, wallet);
   }
 
   const send1Sol = async () => {
@@ -406,13 +413,14 @@ export default function NewCoin() {
               className="p-1 pl-2 rounded-lg"
               placeholder="Amount"
               name="amount"
+              type="number"
               required
             ></input>
-            <label>Set a base price</label>
+            <label>Provide the Subscriber Count of Your Channel</label>
             <input
               className="p-1 pl-2 rounded-lg"
-              placeholder="Coin Name"
-              name="basePrice"
+              placeholder="Subscriber Count"
+              name="subcount"
               required
             ></input>
             <label>
@@ -422,7 +430,7 @@ export default function NewCoin() {
               className="p-1 pl-2 rounded-lg"
               placeholder="Email"
               name="email"
-              required
+              type="email"
             ></input>
             <input type="submit" value="Submit" />
           </form>

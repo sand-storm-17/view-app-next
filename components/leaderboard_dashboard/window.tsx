@@ -1,8 +1,8 @@
-'use client';
+"use client"
+
 import { useState } from 'react';
 import Leaderboard from './leaderboard-ui';
 import Dashboard from './dashboard';
-import DashboardFeature from '../dashboard/dashboard-feature';
 import { SolanaProvider, WalletButton } from '../solana/solana-provider';
 import { ClusterUiSelect } from '../cluster/cluster-ui';
 import { ClusterProvider, useCluster } from '../cluster/cluster-data-access';
@@ -12,17 +12,11 @@ import { useWallet } from '@solana/wallet-adapter-react';
 export default function Window() {
   const [currentWindow, setCurrentWindow] = useState('Leaderboard');
 
-  function changetoLeaderboard() {
-    setCurrentWindow('Leaderboard');
-  }
-
-  function changetoDashboard() {
-    setCurrentWindow('Dashboard');
-  }
-  const cluster = useCluster();
+  // setCurrentWindow
+  // const cluster = useCluster();
   // console.log(cluster.cluster);
 
-  const wallet = useWallet();
+  // const wallet = useWallet();
   // console.log(wallet.publicKey);
 
   return (
@@ -31,13 +25,17 @@ export default function Window() {
         <div className="flex m-5 justify-center">
           <div className="flex items-center">
             <button
-              onClick={changetoLeaderboard}
+              onClick={()=>{
+                setCurrentWindow('Leaderboard')
+              }}
               className="flex font-heading text-2xl border rounded-l-2xl py-2 px-6 active:bg-background-800 hover:bg-primary-500"
             >
               Leaderboard
             </button>
             <button
-              onClick={changetoDashboard}
+              onClick={()=>{
+                setCurrentWindow('Dashboard')
+              }}
               className="flex font-heading text-2xl border rounded-r-2xl py-2 px-6 active:bg-background-800 hover:bg-primary-500"
             >
               Dashboard

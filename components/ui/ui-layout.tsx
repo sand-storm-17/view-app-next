@@ -15,6 +15,7 @@ import {
   ExplorerLink,
 } from '../cluster/cluster-ui';
 import toast, { Toaster } from 'react-hot-toast';
+import { UserAccountButton } from '../userAccount/UserAccountButton';
 
 export function UiLayout({
   children,
@@ -61,6 +62,7 @@ export function UiLayout({
           </ul>
         </div>
         <div className="flex-none space-x-2">
+          <UserAccountButton/>
           <WalletButton />
           <ClusterUiSelect />
         </div>
@@ -82,7 +84,7 @@ export function UiLayout({
       </div>
       <footer className="footer footer-center p-4 bg-base-300 text-base-content">
         <aside>
-          <p>Created by Sandeep</p>
+          <p>Created by Sandeep, Sanket</p>
         </aside>
       </footer>
     </div>

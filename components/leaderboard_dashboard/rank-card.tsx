@@ -3,15 +3,11 @@
 import { useState } from 'react';
 import { MdKeyboardDoubleArrowUp } from 'react-icons/md';
 import BuySell from '../buySellCard/BuySell';
+import { Coin } from '@prisma/client';
 // import { YouTuber } from '@prisma/client';
 
-interface youtuber {
-  name: string;
-  rank: number;
-  subscribers: number;
-}
 
-export default function RankCard({value}:{value:youtuber}) {
+export default function RankCard({value}:{value:Coin}) {
   let [showBuySell, setShowBuySell] = useState(true);
   function showBuySellWindow() {
     setShowBuySell(!showBuySell);
@@ -21,10 +17,10 @@ export default function RankCard({value}:{value:youtuber}) {
     <div className="flex gap-2 border border-none bg-accent-200 mx-10 px-10 py-2 justify-between rounded-tr-lg rounded-bl-lg font-heading text-md shadow-sm shadow-accent-500">
       <div className="flex items-center">
         <MdKeyboardDoubleArrowUp />
-        {value.rank}
+        {value.id}
       </div>
       <div className="flex-1 ">{value.name}</div>
-      <div className="flex-1">{value.subscribers}</div>
+      <div className="flex-1">{value.subscriberCount}</div>
       <div className="flex gap-2">
         <button
           onClick={showBuySellWindow}
