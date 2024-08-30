@@ -15,9 +15,10 @@ interface Coindata {
 
 const prisma = new PrismaClient();
 export async function saveCoin(data: Coindata) {
-  await prisma.coin.create({
-    data: {
-      name: data.coinName,
+  try{
+    await prisma.coin.create({
+      data: {
+        name: data.coinName,
       mintAmount: data.amount,
       mint: data.mint,
       mintAuth: data.mintAuth,
@@ -27,4 +28,8 @@ export async function saveCoin(data: Coindata) {
       subscriberCount: data.subscriberCount
     },
   });
+} catch(catchError: any){ {
+    return { message: catchError.message, statusCode: 500 };
+  }
+}
 }
