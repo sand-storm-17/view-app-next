@@ -1,16 +1,20 @@
+"use client";
+
 import React, { useState } from "react";
 import { MdAccountCircle } from "react-icons/md";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { toast } from "react-hot-toast";
-
-const mockWalletPublicKey = "ABCD1234EFGH5678IJKL9012MNOP3456QRST7890";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 export function ProfileDropdown() {
+  const wallet = useWallet();
   const [profilePic, setProfilePic] = useState<string | null>(null);
   const [username, setUsername] = useState<string>("anonymous");
   const [newUsername, setNewUsername] = useState<string>("");
   const [newProfilePic, setNewProfilePic] = useState<string | null>(null);
   const [showUpdateProfile, setShowUpdateProfile] = useState<boolean>(false);
+  let walletAddress;
+  walletAddress = wallet.publicKey?.toBase58();
 
   const handleProfileUpdate = () => {
     if (newUsername) {
@@ -39,11 +43,11 @@ export function ProfileDropdown() {
         </li>
         <li>
           <CopyToClipboard
-            text={mockWalletPublicKey}
+            text={walletAddress?.toString()!}
             onCopy={() => toast.success("Copied to clipboard!")}
           >
             <a>
-              Wallet: <span className="text-xs">{mockWalletPublicKey}</span>
+              Wallet: <span className="text-xs">{walletAddress}</span>
             </a>
           </CopyToClipboard>
         </li>
