@@ -37,7 +37,7 @@ export async function GET() {
     return NextResponse.json({ coins });
   } catch (error) {
     console.error("Error fetching coins", error);
-    return NextResponse.error();
+    return NextResponse.json({ error: `Failed because of ${error}` }, { status: 500 });
   }
 }
 

@@ -8,7 +8,9 @@ import { useQuery } from "@tanstack/react-query";
 
 async function getCoins() {
   // Fetch data from external API
-  const res = await fetch("https://view-app-next.vercel.app/api/coins");
+  const res = await fetch("https://view-app-next.vercel.app/api/coins", {
+    method: "GET",
+  });
 
   if (!res.ok) {
     throw new Error("Failed to fetch coins");
@@ -22,7 +24,12 @@ export default function Leaderboard() {
     queryFn: async () => await getCoins(),
     queryKey: ["id"],
   });
-  if (isLoading) return <div className="flex basis-full justify-center items-center"><span className="loading loading-spinner"></span></div>;
+  if (isLoading)
+    return (
+      <div className="flex basis-full justify-center items-center">
+        <span className="loading loading-spinner"></span>
+      </div>
+    );
   if (isError) return <div>Sorry, there was an Error</div>;
   return (
     <div className="flex basis-full flex-col gap-2">
