@@ -342,7 +342,7 @@ const CreateNewCoin = async (
   };
   // await saveCoin(data);
   try{
-    await fetch('http://view-app-next.vercel.app/api/coins', {
+    await fetch('https://view-app-next.vercel.app/api/coins', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify(data)
