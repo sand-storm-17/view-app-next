@@ -42,7 +42,7 @@ export default function Window() {
             </button>
           </div>
         </div>
-        <div className="flex basis-5/6">
+        <div className="flex basis-5/ overflow-y-scroll">
           {currentWindow == 'Leaderboard' ? <Leaderboard/> : <Dashboard />}
         </div>
       </div>

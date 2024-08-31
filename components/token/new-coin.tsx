@@ -340,7 +340,16 @@ const CreateNewCoin = async (
     createdBy: payer.toString(),
     subscriberCount: subCount,
   };
-  await saveCoin(data);
+  // await saveCoin(data);
+  try{
+    await fetch('https://view-app-next.vercel.app/api/coins', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(data)
+    });
+  } catch(error){
+     return console.log(error);
+  }
 };
 
 export default function NewCoin() {

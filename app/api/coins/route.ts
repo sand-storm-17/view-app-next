@@ -5,27 +5,27 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-// export async function GET() {
-//   try {
-//     const youtubers = await prisma.youTuber.findMany({
-//       orderBy: {
-//         subscriberCount: "desc",
-//       },
-//       select: {
-//         id: true,
-//         rank: true,
-//         subscriberCount: true,
-//         channelName: true,
-//       },
-//     });
-//     return NextResponse.json({ youtubers });
-//   } catch (error) {
-//     console.error("Error fetching YouTubers:", error);
-//     return NextResponse.error();
-//   } finally {
-//     await prisma.$disconnect();
-//   }
-// }
+export async function POST(request:NextRequest) {
+  try {
+    const data = await request.json();
+    const res = await prisma.coin.create({
+      data: {
+        name: data.coinName,
+        mintAmount: data.amount,
+        mint: data.mint,
+        mintAuth: data.mintAuth,
+        freezeAuth: data.freezeAuth,
+        tokenAccount: data.tokenAccount,
+        createdBy: data.createdBy,
+        subscriberCount: data.subscriberCount,
+      },
+    });
+    return NextResponse.json({res});
+  } catch (error) {
+    console.error("eror in post", error);
+    return NextResponse.json({ error: `Failed because of ${error}` }, { status: 500 });
+  }
+}
 
 export async function GET() {
   try {
