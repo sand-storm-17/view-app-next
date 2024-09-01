@@ -216,10 +216,7 @@ export default function Buy() {
   const [totalCost, setTotalCost] = useState(0);
   const walletAddress = wallet.publicKey!;
   const walletBalance = useGetBalance({ address: walletAddress });
-  let curTokenFirst:Coin = data?.find((token) => {
-    return token.name === 'BITCOIN';
-  })!;;
-  const [curToken,setCurToken] = useState(curTokenFirst);
+  const [curToken,setCurToken] = useState<Coin>();
 
   const handleNumberOfTokensChange = (event: { target: { value: string } }) => {
     const value = Number(event.target.value);
@@ -248,7 +245,7 @@ export default function Buy() {
   const buyHandler = () => {
     if(data !== undefined){
       sendTokens(
-        curToken,
+        curToken!,
         wallet.publicKey!,
         connection,
         wallet,
@@ -305,7 +302,7 @@ export default function Buy() {
             />
           </div>
           <div className="flex items-center font-body">
-            <p>Total Cost: {totalCost.toFixed(10)} SOL</p>
+            <p>Cost Per Token: {totalCost.toFixed(10)} SOL</p>
           </div>
         </div>
         <div className="flex items-center font-body">
