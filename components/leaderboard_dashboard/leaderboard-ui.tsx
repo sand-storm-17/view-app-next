@@ -30,7 +30,7 @@ export default function Leaderboard() {
         <span className="loading loading-spinner"></span>
       </div>
     );
-  if (isError) return <div>Sorry, there was an Error</div>;
+  if (isError) return <div className="flex basis-full justify-center items-center">Sorry, there was an Error</div>;
   return (
     <div className="flex basis-full flex-col gap-2">
       <div className="flex gap-2 border border-none bg-accent-200 mx-10 px-10 py-2 justify-between rounded-tr-lg rounded-bl-lg font-heading text-md shadow-sm shadow-accent-500">

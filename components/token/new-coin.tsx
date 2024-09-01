@@ -13,7 +13,6 @@ import {
   TransactionInstruction,
 } from "@solana/web3.js";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { sendTransaction } from "./sendTransaction";
 import {
   Account,
   AccountType,
@@ -380,10 +379,6 @@ export default function NewCoin() {
     const mint = await CreateNewCoin(name, value, subcount, connection, wallet);
   }
 
-  const send1Sol = async () => {
-    const receiverAdd = wallet.publicKey;
-    await sendTransaction(receiverAdd!, 1000);
-  };
 
   return (
     <div className="absolute flex">

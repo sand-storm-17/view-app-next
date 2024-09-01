@@ -9,6 +9,7 @@ import { ExplorerLink } from "../cluster/cluster-ui";
 import { ellipsify } from "../ui/ui-layout";
 import { useMemo, useState } from "react";
 import { IconRefresh } from "@tabler/icons-react";
+import Link from "next/link";
 
 export function useGetTokenAccounts({ address }: { address: PublicKey }) {
   const { connection } = useConnection();
@@ -55,21 +56,18 @@ export default function Dashboard() {
           {query.data.length === 0 ? (
             <div>No token accounts found.</div>
           ) : (
-            <div className="flex basis-full items-center justify-center table border-4 rounded-lg border-separate border-base-300 overflow-scroll">
-              <div>
-                <div className="flex basis-full justify-around font-body">
-                  <div>Name</div>
-                  <div>Account Public Key</div>
+            <div className="flex grow-0 basis-full items-center justify-center table border-4 rounded-lg border-separate border-base-300 overflow-scroll">
+              <div className="basis-full justify-evenly">
+                <div className="flex grow-0 basis-full justify-evenly font-body">
+                  <div>Token Acc Public Key</div>
                   <div>Mint Public Key</div>
-                  <div className="text-right">Balance</div>
+                  <div>Balance</div>
+                  <div>Sell</div>
                 </div>
               </div>
               <div className="flex-col basis-full">
                 {items?.map(({ account, pubkey }) => (
                   <div key={pubkey.toString()} className="flex justify-around">
-                    <div className="flex space-x-2">
-                      <span className="font-body">TokenName</span>
-                    </div>
                     <div>
                       <div className="flex space-x-2">
                         <span className="font-body">
@@ -94,6 +92,15 @@ export default function Dashboard() {
                       <span className="font-body">
                         {account.data.parsed.info.tokenAmount.uiAmount}
                       </span>
+                    </div>
+                    <div>
+                      <Link
+                        href="/sell"
+                        // onClick={showBuySellWindow}
+                        className="flex-1 px-2 rounded-lg hover:bg-white bg-red-600 text-black"
+                      >
+                        Sell
+                      </Link>
                     </div>
                   </div>
                 ))}

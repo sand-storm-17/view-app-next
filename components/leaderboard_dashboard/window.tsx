@@ -21,9 +21,9 @@ export default function Window() {
 
   return (
     <div className="flex shrink basis-full bg-background-800 justify-center items-center">
-      <div className="flex shrink flex-col w-2/5 h-2/3 bg-background-100 border-none justify-center rounded-xl ">
+      <div className="flex shrink grow-0 flex-col w-2/5 h-2/3 bg-background-100 border-none rounded-xl ">
         <div className="flex shrink m-5 justify-center">
-          <div className="flex shrink items-center">
+          <div className="flex shrink items-start">
             <button
               onClick={()=>{
                 setCurrentWindow('Leaderboard')
