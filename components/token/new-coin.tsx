@@ -395,7 +395,10 @@ export default function NewCoin() {
         Send 1 Sol
       </button> */}
       {showModal ? (
-        <div className="absolute flex items-start bg-transparent h-1/2 w-1/4 rounded-2xl">
+        <div
+          className="absolute flex items-start bg-transparent h-1/2 w-1/4 rounded-2xl"
+          style={{ top: "20px" }}
+        >
           <form
             action={onSubmitHandler}
             className="flex flex-col gap-4 p-8 m-8 bg-background-400 rounded-3xl font-body1 text-lg"

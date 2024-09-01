@@ -14,13 +14,13 @@ datasource db {
 }
 
 model Coin {
-  id Int @id @default(autoincrement())
-  name String 
-  mintAmount Int
-  mint String[]
-  mintAuth String[]
-  freezeAuth String[]
-  tokenAccount String[]
-  createdBy String
+  id              Int      @id @default(autoincrement())
+  name            String
+  mintAmount      Int
+  mint            String[]
+  mintAuth        String[]
+  freezeAuth      String[]
+  tokenAccount    String[]
+  createdBy       String
   subscriberCount Int
 }
