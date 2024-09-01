@@ -37,7 +37,7 @@ import { useAnchorProvider } from "../solana/solana-provider";
 
 async function getCoins() {
   // Fetch data from external API
-  const res = await fetch("http://localhost:3000/api/coins");
+  const res = await fetch("https://view-app-next.vercel.app/api/coins");
 
   if (!res.ok) {
     throw new Error("Failed to fetch coins");
