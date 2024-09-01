@@ -84,7 +84,7 @@ export function UiLayout({
       </div>
       <footer className="footer footer-center p-4 bg-base-300 text-base-content">
         <aside>
-          <p>Created by Sandeep, Sanket</p>
+          <p>Created by Sandeep & Sanket</p>
         </aside>
       </footer>
     </div>

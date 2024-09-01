@@ -39,7 +39,7 @@ import {
 import { PublicKey } from "@solana/web3.js";
 import { token } from "@coral-xyz/anchor/dist/cjs/utils";
 import { serialize } from "borsh";
-import { Coin } from "@prisma/client";
+// import { Coin } from "@prisma/client";
 import { saveCoin } from "@/app/actions";
 
 interface Coindata {
@@ -94,17 +94,15 @@ const CreateNewCoin = async (
   const signers: Signer[] = [mintAccount];
   let signature1;
   let latestBlockHash;
-    signature1 = await wallet.sendTransaction(transaction, connection, {
-      signers: signers,
-    });
-  
-    latestBlockHash = await connection.getLatestBlockhash();
-    
-    console.log(mintAccount.publicKey.toBase58());
+  signature1 = await wallet.sendTransaction(transaction, connection, {
+    signers: signers,
+  });
 
-  if(latestBlockHash === undefined) throw Error;
+  latestBlockHash = await connection.getLatestBlockhash();
 
-  
+  console.log(mintAccount.publicKey.toBase58());
+
+  if (latestBlockHash === undefined) throw Error;
 
   const mintInfo = await getMint(connection, mintAccount.publicKey);
   console.log(mintInfo.supply);
@@ -340,14 +338,14 @@ const CreateNewCoin = async (
     subscriberCount: subCount,
   };
   // await saveCoin(data);
-  try{
-    await fetch('https://view-app-next.vercel.app/api/coins', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(data)
+  try {
+    await fetch("https://view-app-next.vercel.app/api/coins", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
     });
-  } catch(error){
-     return console.log(error);
+  } catch (error) {
+    return console.log(error);
   }
 };
 
@@ -392,7 +390,10 @@ export default function NewCoin() {
         Send 1 Sol
       </button> */}
       {showModal ? (
-        <div className="absolute flex items-start bg-transparent h-1/2 w-1/4 rounded-2xl">
+        <div
+          className="absolute flex items-start bg-transparent h-1/2 w-1/4 rounded-2xl"
+          style={{ top: "20px" }}
+        >
           <form
             action={onSubmitHandler}
             className="flex flex-col gap-4 p-8 m-8 bg-background-400 rounded-3xl font-body1 text-lg"
